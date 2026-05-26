@@ -640,11 +640,6 @@
         </div>
 
         <div class="calc-stat">
-            <div class="calc-stat-label">זמן עבודה נטו (סך שלבים)</div>
-            <div class="calc-stat-val" id="total-time">0 שבועות</div>
-        </div>
-
-        <div class="calc-stat" style="border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 0.75rem; margin-top: 0.75rem;">
             <div class="calc-stat-label" style="font-weight: 500; font-size: 0.9rem;">יעד קלנדרי מומלץ לפרויקט</div>
             <div class="calc-stat-val" id="calendar-time" style="font-size: 1.25rem; color: #a7f3d0; font-weight: 800;">-</div>
             <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.4rem; line-height: 1.3;" id="calendar-caveat">
@@ -1024,7 +1019,6 @@
 
         let totalHours = 0;
         let totalCost = 0;
-        let totalTime = 0;
         let countSprints = 0;
         let countOptions = 0;
 
@@ -1037,7 +1031,6 @@
                 card.classList.add('active');
                 totalHours += parseInt(cb.getAttribute('data-hours'));
                 totalCost += parseInt(cb.getAttribute('data-cost'));
-                totalTime += parseFloat(cb.getAttribute('data-time'));
                 
                 if (cb.getAttribute('data-type') === 'sprint') {
                     countSprints++;
@@ -1051,16 +1044,6 @@
 
         document.getElementById('total-hours').innerText = totalHours + ' שעות';
         document.getElementById('total-cost').innerText = '₪' + totalCost.toLocaleString();
-        // Show net work in the same unit family as the calendar target below:
-        // tiny selections (≤ ~3 weeks) stay in weeks; everything else converts to months
-        // so the two stats are visually comparable instead of mixing units.
-        let netTimeText;
-        if (totalTime <= 3) {
-            netTimeText = totalTime.toFixed(1) + ' שבועות';
-        } else {
-            netTimeText = 'כ-' + (totalTime / 4.33).toFixed(1) + ' חודשים';
-        }
-        document.getElementById('total-time').innerText = netTimeText;
         document.getElementById('selected-sprints-count').innerText = countSprints;
         document.getElementById('selected-options-count').innerText = countOptions;
 
