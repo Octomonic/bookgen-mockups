@@ -209,6 +209,131 @@
             font-size: 0.78rem;
         }
 
+        .section-note {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            padding: 0.9rem 1.1rem;
+            margin-bottom: 1.25rem;
+            background: rgba(59, 130, 246, 0.06);
+            border-right: 3px solid var(--brand-yellow);
+            border-radius: 4px;
+        }
+
+        .engagement-terms {
+            background: linear-gradient(135deg, #111827 0%, #0a0d16 100%);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+        }
+
+        @media (min-width: 768px) {
+            .engagement-terms { padding: 2.5rem; }
+        }
+
+        .engagement-terms h2 {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+            font-size: 1.5rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .terms-list {
+            list-style: none;
+            counter-reset: term;
+            padding: 0;
+            margin: 0;
+        }
+
+        .terms-list > li {
+            counter-increment: term;
+            position: relative;
+            padding-right: 3.25rem;
+            margin-bottom: 1.4rem;
+        }
+
+        .terms-list > li::before {
+            content: counter(term);
+            position: absolute;
+            right: 0;
+            top: 0;
+            background: var(--brand-yellow);
+            color: var(--brand-black);
+            width: 2.1rem;
+            height: 2.1rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 0.9rem;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .terms-list h4 {
+            font-size: 1.05rem;
+            color: var(--text-main);
+            margin-bottom: 0.25rem;
+        }
+
+        .terms-list p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.65;
+            margin: 0;
+        }
+
+        .out-of-scope {
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px dashed var(--border);
+        }
+
+        .out-of-scope h3 {
+            font-size: 1.15rem;
+            color: var(--text-main);
+            margin-bottom: 0.5rem;
+        }
+
+        .out-of-scope > p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-bottom: 0.9rem;
+        }
+
+        .exclusions-list {
+            list-style: none;
+            padding: 0;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 0.5rem;
+        }
+
+        @media (min-width: 700px) {
+            .exclusions-list { grid-template-columns: 1fr 1fr; }
+        }
+
+        .exclusions-list li {
+            color: var(--text-muted);
+            font-size: 0.92rem;
+            padding-right: 1.4rem;
+            position: relative;
+            line-height: 1.5;
+        }
+
+        .exclusions-list li::before {
+            content: '×';
+            position: absolute;
+            right: 0;
+            top: -2px;
+            color: #ef4444;
+            font-weight: 800;
+            font-size: 1.15rem;
+        }
+
         .header-title h1 {
             font-size: 2rem;
             margin-bottom: 0.5rem;
@@ -756,6 +881,7 @@
         <div class="calc-stat stat-price">
             <div class="calc-stat-label">עלות כוללת מוערכת</div>
             <div class="calc-stat-val" id="total-cost">₪0</div>
+            <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.3rem; font-weight: 500;">המחירים אינם כוללים מע"מ.</p>
         </div>
 
         <div class="calc-stat">
@@ -787,6 +913,7 @@
                 <span>1. שלבי הפיתוח המודולריים (מערכת הליבה)</span>
                 <span class="section-badge">נדרש להשקת האתר (MVP)</span>
             </h2>
+            <p class="section-note">ניתן לבחור ולשלם על כל שלב בנפרד — אין חובה להזמין את כל ההצעה מראש. עם זאת, כל שלב מחייב את השלמת השלבים שלפניו כתנאי קדם (לדוגמה: שלב 3 דורש שלבים 1 ו-2 הושלמו ואושרו).</p>
             <div class="cards-list">
                 
                 <!-- Stage 1 -->
@@ -1013,6 +1140,82 @@
                     <h4>אחריות הלקוח על רכיבים חיצוניים והחלטות פנימיות</h4>
                     <p>כל רכיב שאינו מוגדר במפורש בסקופ זה — לרבות בחירה והתקשרות עם ספקי צד שלישי (סליקה, בית דפוס, ענן, מערכות דיוור, אנליטיקה וכו'), כלים ושירותים חיצוניים, וכן כל החלטה עסקית או תפעולית פנימית מצד הלקוח — באחריותו הבלעדית של הלקוח לאורך כל הפרויקט. עיכוב, היעדר החלטה או שינוי מאוחר ברכיבים אלו עשויים להשפיע ישירות על לוח הזמנים, על איכות התוצר ועל היקף השעות הנדרש למסירה.</p>
                 </div>
+            </div>
+        </section>
+
+        <!-- תנאי התקשרות מפורטים -->
+        <section class="engagement-terms">
+            <h2>
+                <span>3. תנאי התקשרות</span>
+                <span class="section-badge">תקף ל-14 ימים</span>
+            </h2>
+
+            <ol class="terms-list">
+                <li>
+                    <h4>תוקף ההצעה</h4>
+                    <p>הצעה זו תקפה למשך 14 ימים מיום הגשתה. לאחר מועד זה ייתכנו עדכוני תמחור או שינויים בהיקף.</p>
+                </li>
+                <li>
+                    <h4>מע"מ</h4>
+                    <p>כל המחירים בהצעה זו אינם כוללים מע"מ. מע"מ יתווסף לכל חשבונית בהתאם לשיעור הקבוע בחוק בעת ההנפקה.</p>
+                </li>
+                <li>
+                    <h4>תלות בין שלבים ובחירה מודולרית</h4>
+                    <p>ניתן לבחור ולשלם על כל שלב או תוספת בנפרד — אין חובה להתחייב מראש על כל ההצעה. עם זאת, כל שלב מחייב את השלמת השלבים שלפניו כתנאי קדם (לדוגמה: שלב 4 דורש השלמה ואישור של שלבים 1, 2 ו-3).</p>
+                </li>
+                <li>
+                    <h4>מסירת שלב, בדיקה ואישור</h4>
+                    <p>בתום כל שלב יימסר התוצר לבדיקת הלקוח. ללקוח יוקצו שבועיים (14 ימים קלנדריים) לבדיקה ואישור או החזרת הערות בכתב. שלב שלא יוערות/יאושר בתוך פרק זמן זה ייחשב מאושר אוטומטית. השהיה מעבר לכך תסווג כעיכוב מצד הלקוח ועלולה להשפיע על לוח הזמנים של שלבים הבאים.</p>
+                </li>
+                <li>
+                    <h4>אחריות שגיאות לאחר מסירה (Warranty)</h4>
+                    <p>שלושים ימים ממסירת כל שלב מוקצים לתיקון באגים שייווצרו בתוצר שנמסר, ללא עלות נוספת. דיווחים שיתקבלו לאחר חלוף תקופה זו יטופלו במסגרת תעריף שעתי רגיל.</p>
+                </li>
+                <li>
+                    <h4>בקשות לשינוי לאחר סגירת שלב</h4>
+                    <p>כל שינוי, תוספת או בקשה הנוגעים לשלב שכבר אושר ושולם — יטופלו לפי תעריף שעתי של 150 ₪ לשעה, בכפוף לאומדן שעות שייאושר על ידי הלקוח בכתב לפני תחילת העבודה. בזמן ביצוע שלב פעיל, ההיקף קבוע לפי המסוכם בתחילתו.</p>
+                </li>
+                <li>
+                    <h4>בעלות על התוצר ורישוי</h4>
+                    <p>עם השלמת מלוא התשלום עבור כל שלב, הלקוח מקבל בעלות מלאה ובלעדית על הפלטפורמה הספציפית שפותחה עבורו במסגרת הצעה זו — לרבות קוד היישום הסופי, מבני הנתונים הייעודיים, התוכן והעיצובים שהוכנו במיוחד עבור המוצר. Octomonic שומרת לעצמה זכויות מלאות להמשך שימוש, פיתוח, רישוי או הפצה של רכיבים גנריים שאינם ייחודיים למוצר זה — לרבות רכיבי קוד, ספריות פנימיות, תבניות פיתוח, לוגיקה כללית, כלים, ארכיטקטורה ותהליכי עבודה — בכל פרויקט, מוצר או נכס קניין רוחני עתידי של Octomonic, ללא הגבלה.</p>
+                </li>
+                <li>
+                    <h4>חשבונות תשתית בשם הלקוח</h4>
+                    <p>כל חשבונות התשתית, ספקי הצד השלישי והדומיינים (Vercel, Supabase, סליקה, בית דפוס, ענן, מערכות דיוור, אנליטיקה וכו') ייפתחו ויירשמו על שם הלקוח כבעלים בלעדי. כך הלקוח מחזיק בשליטה מלאה על נכסי התשתית מהיום הראשון.</p>
+                </li>
+                <li>
+                    <h4>הדרכה ומסירה</h4>
+                    <p>שבוע אחד של הדרכה ומסירה כלול במחיר ההצעה — לתפעול ה-CMS, ניהול ספרים ושאלות, ניהול תוכן, סקירת דוחות ניהוליים ולכלל פעולות התפעול השוטף. הדרכה, ליווי או הכשרה מעבר לשבוע זה יתומחרו בתעריף שעתי (150 ₪/שעה).</p>
+                </li>
+                <li>
+                    <h4>תמיכה ותחזוקה לאחר השקה</h4>
+                    <p>היקף, מודל ועלות התמיכה והתחזוקה לאחר ההשקה הסופית ייסקרו ויתומחרו לקראת סיום שלב 4, בהתאם לצרכי הלקוח, להיקף השימוש בפועל ולציפיות הנגזרות מהתפעול.</p>
+                </li>
+                <li>
+                    <h4>קצב תקשורת ועדכונים</h4>
+                    <p>שיחת עדכון אחת לשבועיים (Bi-weekly) במהלך כל הפרויקט, וכן פגישה (Zoom או פרונטלית, לפי בחירת הלקוח) במועד מסירת כל שלב — לסקירה, אישור והגדרת הצעדים הבאים.</p>
+                </li>
+                <li>
+                    <h4>סודיות</h4>
+                    <p>התקשרות זו, וכלל המידע שיוחלף במסגרתה, כפופים להסכם הסודיות (NDA) ההדדי החתום בין הצדדים מיום 28 באפריל 2026.</p>
+                </li>
+            </ol>
+
+            <div class="out-of-scope">
+                <h3>מה לא נכלל בסקופ ההצעה (Out of Scope)</h3>
+                <p>הפריטים הבאים אינם כלולים בהצעה זו. ככל שיידרשו במהלך הפרויקט, יתומחרו בנפרד או יסופקו ע"י הלקוח/צד שלישי מטעמו:</p>
+                <ul class="exclusions-list">
+                    <li>כתיבת תכני הספרים, סיפורי בסיס וטקסטים שיווקיים</li>
+                    <li>איורים, אילוסטרציות, צילומים או רכש תמונות סטוק</li>
+                    <li>עיצוב מותג, לוגו, מערכת זהות חזותית וטיפוגרפיה מקצועית</li>
+                    <li>תרגום הספרים או הממשק לשפות מעבר לעברית ואנגלית</li>
+                    <li>פיתוח אפליקציות מובייל ייעודיות והפצה לחנויות (App Store / Google Play)</li>
+                    <li>שירותי SEO, מסעות פרסום ממומנים וניהול מדיה חברתית</li>
+                    <li>יצירת ספרי דוגמה נוספים מעבר למודל הראשוני המוסכם</li>
+                    <li>שילובים עם מערכות חיצוניות שלא הוזכרו במפורש בהצעה</li>
+                    <li>ייעוץ משפטי, ניסוח תקנון, תנאי שימוש ומדיניות פרטיות</li>
+                    <li>תוכן/דאטה היסטוריים או הגירות ממערכות קיימות (אם יש)</li>
+                </ul>
             </div>
         </section>
 
