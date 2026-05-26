@@ -1,0 +1,1101 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>פלטפורמת ספרים אישיים (BookGen) - תוכנית עבודה ועלויות</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&family=Rubik:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-base: #0a0d16;
+            --bg-card: #121829;
+            --bg-card-active: rgba(59, 130, 246, 0.08);
+            --bg-panel: #1b233d;
+            --primary: #3b82f6;
+            --primary-border: #2563eb;
+            --emerald: #10b981;
+            --emerald-bg: rgba(16, 185, 129, 0.08);
+            --emerald-text: #34d399;
+            --text-main: #ffffff;
+            --text-muted: #cbd5e1;
+            --border: rgba(255, 255, 255, 0.12);
+            --border-active: #3b82f6;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+            --transition: all 0.2s ease-in-out;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Rubik', 'Inter', sans-serif;
+            background-color: var(--bg-base);
+            color: var(--text-main);
+            min-height: 100vh;
+            line-height: 1.6;
+            padding: 2rem 1rem;
+            font-size: 1.1rem; /* גופן גדול וקריא במיוחד */
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Rubik', sans-serif;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2.5rem;
+        }
+
+        @media (min-width: 950px) {
+            .container {
+                grid-template-columns: 360px 1fr;
+                padding: 1rem;
+            }
+            body {
+                padding: 2.5rem 1.5rem;
+            }
+        }
+
+        /* כותרת עליונה */
+        header {
+            grid-column: 1 / -1;
+            background: linear-gradient(135deg, #111827 0%, #1e293b 100%);
+            border: 2px solid var(--border);
+            border-radius: 18px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        @media (min-width: 768px) {
+            header {
+                padding: 2.5rem;
+            }
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 6px;
+            background: linear-gradient(90deg, #3b82f6 0%, #6366f1 100%);
+        }
+
+        .header-title h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(to left, #ffffff, #94a3b8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        @media (min-width: 768px) {
+            .header-title h1 {
+                font-size: 2.5rem;
+            }
+        }
+
+        .header-title p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            max-width: 800px;
+        }
+
+        @media (min-width: 768px) {
+            .header-title p {
+                font-size: 1.2rem;
+            }
+        }
+
+        /* סרגל הנחיות אינטראקטיבי */
+        .instruction-banner {
+            grid-column: 1 / -1;
+            background: rgba(59, 130, 246, 0.1);
+            border: 2px dashed rgba(59, 130, 246, 0.4);
+            border-radius: 12px;
+            padding: 1.25rem;
+            font-size: 1.1rem;
+            color: #93c5fd;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .instruction-banner strong {
+            color: #ffffff;
+        }
+
+        /* פאנל חישוב עלויות צף */
+        aside {
+            background: var(--bg-panel);
+            border: 2px solid var(--border);
+            border-radius: 18px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-direction: column;
+            gap: 1.75rem;
+        }
+
+        @media (min-width: 950px) {
+            aside {
+                position: sticky;
+                top: 2rem;
+                height: fit-content;
+                order: 1; /* עמודת הצידו ראשונה מימין ב-RTL */
+            }
+        }
+
+        @media (max-width: 950px) {
+            aside {
+                order: 2; /* ממוקם מתחת לכרטיסיות בנייד */
+                margin-top: 1rem;
+            }
+        }
+
+        .calc-header h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.25rem;
+            color: #ffffff;
+        }
+
+        .calc-header p {
+            font-size: 1rem;
+            color: var(--text-muted);
+        }
+
+        /* כפתורי בחירה מהירה - גדולים ונגישים */
+        .calc-presets {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .btn-preset {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid var(--border);
+            color: var(--text-main);
+            padding: 0.8rem 1rem;
+            border-radius: 10px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition);
+            width: 100%;
+            text-align: center;
+            font-family: 'Rubik', sans-serif;
+        }
+
+        .btn-preset:hover {
+            background: var(--primary);
+            border-color: var(--primary-border);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        /* כרטיסיות נתונים */
+        .calc-stat {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 14px;
+            padding: 1.5rem;
+            border: 2px solid var(--border);
+        }
+
+        .calc-stat-label {
+            font-size: 0.9rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+        }
+
+        .calc-stat-val {
+            font-family: 'Rubik', sans-serif;
+            font-weight: 800;
+            font-size: 2.2rem;
+            color: var(--text-main);
+        }
+
+        .stat-price {
+            background: var(--emerald-bg);
+            border-color: rgba(16, 185, 129, 0.3);
+        }
+
+        .stat-price .calc-stat-val {
+            color: var(--emerald-text);
+        }
+
+        .calc-details-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            border-top: 1px solid var(--border);
+            padding-top: 1rem;
+        }
+
+        .calc-detail-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 1rem;
+            color: var(--text-muted);
+        }
+
+        .calc-detail-row span:last-child {
+            color: var(--text-main);
+            font-weight: 700;
+        }
+
+        /* תוכן מרכזי */
+        main {
+            display: flex;
+            flex-direction: column;
+            gap: 3rem;
+        }
+
+        @media (min-width: 950px) {
+            main {
+                order: 2; /* ממוקם משמאל לסידבר ב-RTL */
+            }
+        }
+
+        @media (max-width: 950px) {
+            main {
+                order: 1; /* ממוקם ראשון בנייד לפני הפירוט */
+            }
+        }
+
+        section h2 {
+            font-size: 1.7rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+
+        @media (min-width: 768px) {
+            section h2 {
+                font-size: 1.9rem;
+            }
+        }
+
+        .section-badge {
+            font-size: 0.85rem;
+            background: rgba(59, 130, 246, 0.15);
+            color: #93c5fd;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            padding: 0.25rem 0.75rem;
+            border-radius: 6px;
+            font-weight: normal;
+        }
+
+        /* כרטיסיות ספרינטים */
+        .cards-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border: 2px solid var(--border);
+            border-radius: 14px;
+            padding: 1.75rem;
+            display: grid;
+            grid-template-columns: 44px 1fr;
+            align-items: start;
+            gap: 1.25rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        @media (min-width: 700px) {
+            .card {
+                grid-template-columns: 50px 1fr auto;
+                gap: 1.5rem;
+            }
+        }
+
+        .card:hover {
+            border-color: var(--primary);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .card.active {
+            background-color: var(--bg-card-active);
+            border-color: var(--border-active);
+            box-shadow: 0 0 18px rgba(59, 130, 246, 0.15);
+        }
+
+        /* תיבת סימון ענקית ונגישה */
+        .checkbox-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 36px;
+        }
+
+        .card-checkbox {
+            appearance: none;
+            width: 32px;
+            height: 32px;
+            border: 3px solid var(--text-muted);
+            border-radius: 8px;
+            background: transparent;
+            cursor: pointer;
+            position: relative;
+            transition: var(--transition);
+        }
+
+        .card-checkbox:checked {
+            background: var(--primary);
+            border-color: var(--primary);
+        }
+
+        .card-checkbox:checked::after {
+            content: '';
+            position: absolute;
+            left: 9px;
+            top: 3px;
+            width: 8px;
+            height: 16px;
+            border: solid white;
+            border-width: 0 3.5px 3.5px 0;
+            transform: rotate(45deg);
+        }
+
+        /* פירוט הכרטיסייה */
+        .card-content {
+            display: flex;
+            flex-direction: column;
+            gap: 0.85rem;
+        }
+
+        .card-title-bar {
+            display: flex;
+            align-items: flex-start;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        @media (min-width: 700px) {
+            .card-title-bar {
+                flex-direction: row;
+                align-items: center;
+                gap: 1rem;
+                flex-wrap: wrap;
+            }
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        @media (min-width: 768px) {
+            .card-title {
+                font-size: 1.35rem;
+            }
+        }
+
+        .card-time-badge {
+            font-size: 0.85rem;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid var(--border);
+            padding: 0.2rem 0.6rem;
+            border-radius: 6px;
+            color: var(--text-muted);
+            font-weight: 600;
+            width: fit-content;
+        }
+
+        .rfp-link {
+            font-size: 0.85rem;
+            color: #60a5fa;
+            background: rgba(96, 165, 250, 0.08);
+            border: 1px solid rgba(96, 165, 250, 0.2);
+            padding: 0.15rem 0.6rem;
+            border-radius: 4px;
+            width: fit-content;
+        }
+
+        .card-desc {
+            font-size: 1.05rem;
+            color: var(--text-muted);
+        }
+
+        .card-justification {
+            font-size: 0.95rem;
+            color: #93c5fd;
+            background: rgba(59, 130, 246, 0.06);
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            border-right: 4px solid var(--primary); /* עיצוב ימני עבור RTL */
+        }
+
+        /* עמודת מחיר */
+        .card-price-info {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            justify-content: flex-start;
+            font-family: 'Rubik', sans-serif;
+            font-weight: 800;
+            font-size: 1.5rem;
+            color: var(--text-main);
+            min-width: 120px;
+        }
+
+        @media (max-width: 700px) {
+            .card-price-info {
+                grid-column: 1 / -1;
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+                border-top: 1px solid var(--border);
+                padding-top: 0.75rem;
+                margin-top: 0.5rem;
+                font-size: 1.35rem;
+                min-width: 100%;
+            }
+        }
+
+        .card-hours-sub {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            font-weight: 500;
+            margin-top: 0.1rem;
+        }
+
+        @media (max-width: 700px) {
+            .card-hours-sub {
+                margin-top: 0;
+            }
+        }
+
+        /* פאנל תנאי התקשרות */
+        .terms-panel {
+            background: rgba(255, 255, 255, 0.02);
+            border: 2px dashed var(--border);
+            border-radius: 18px;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .terms-panel h3 {
+            font-size: 1.5rem;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 0.5rem;
+        }
+
+        .terms-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+
+        @media (min-width: 700px) {
+            .terms-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .term-card h4 {
+            font-size: 1.2rem;
+            color: #60a5fa;
+            margin-bottom: 0.4rem;
+        }
+
+        .term-card p {
+            font-size: 1rem;
+            color: var(--text-muted);
+        }
+
+        /* בר נייד דביק בתחתית */
+        .mobile-sticky-bar {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(27, 35, 61, 0.95);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-top: 2px solid var(--primary);
+            padding: 0.9rem 1.25rem;
+            z-index: 1000;
+            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.6);
+            transition: var(--transition);
+        }
+
+        @media (max-width: 950px) {
+            .mobile-sticky-bar {
+                display: block;
+            }
+            body {
+                padding-bottom: 6rem; /* מניעת חפיפה עם הבר הדביק בתחתית */
+            }
+        }
+
+        .mobile-sticky-content {
+            max-width: 800px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .mobile-sticky-stats {
+            display: flex;
+            align-items: center;
+            gap: 0.65rem;
+            font-family: 'Rubik', sans-serif;
+            font-weight: 800;
+            font-size: 1.2rem;
+        }
+
+        .mobile-sticky-hours {
+            color: var(--text-main);
+        }
+
+        .mobile-sticky-divider {
+            color: var(--border);
+        }
+
+        .mobile-sticky-price {
+            color: var(--emerald-text);
+        }
+
+        .mobile-sticky-btn {
+            background: var(--primary);
+            border: none;
+            color: #ffffff;
+            padding: 0.55rem 1.1rem;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            font-family: 'Rubik', sans-serif;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .mobile-sticky-btn:hover {
+            background: var(--primary-border);
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <div class="header-title">
+            <h1>פלטפורמת ספרים אישיים (BookGen)</h1>
+            <p>מתכנן סבבי פיתוח אינטראקטיבי ופירוט עלויות עבור רחל מירום וצחית שפירא</p>
+        </div>
+    </header>
+
+    <div class="instruction-banner">
+        <strong>💡 טיפ אינטראקטיבי:</strong> לחצו על כרטיסיות השלבים או התוספות כדי לסמן אותן ולראות כיצד הן משפיעות על העלות הכוללת ולוחות הזמנים של הפרויקט בזמן אמת.
+    </div>
+
+    <aside>
+        <div class="calc-header">
+            <h3>סיכום תקציב ולו"ז</h3>
+            <p>התאימו את הפרויקט לצרכים שלכן</p>
+        </div>
+        <div class="calc-presets">
+            <button class="btn-preset" onclick="applyPreset('essential')">מערכת הליבה (שלבים 1-4)</button>
+            <button class="btn-preset" onclick="applyPreset('expanded')">מערכת ליבה + כל התוספות</button>
+            <button class="btn-preset" onclick="applyPreset('clear')">איפוס בחירות</button>
+        </div>
+
+        <div class="calc-stat">
+            <div class="calc-stat-label">סך שעות פיתוח</div>
+            <div class="calc-stat-val" id="total-hours">0 שעות</div>
+        </div>
+
+        <div class="calc-stat stat-price">
+            <div class="calc-stat-label">עלות כוללת מוערכת</div>
+            <div class="calc-stat-val" id="total-cost">₪0</div>
+        </div>
+
+        <div class="calc-stat">
+            <div class="calc-stat-label">זמן עבודה נטו (סך שלבים)</div>
+            <div class="calc-stat-val" id="total-time">0 שבועות</div>
+        </div>
+
+        <div class="calc-stat" style="border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 0.75rem; margin-top: 0.75rem;">
+            <div class="calc-stat-label" style="font-weight: 500; font-size: 0.9rem;">יעד קלנדרי מומלץ לפרויקט</div>
+            <div class="calc-stat-val" id="calendar-time" style="font-size: 1.25rem; color: #a7f3d0; font-weight: 800;">-</div>
+            <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.4rem; line-height: 1.3;" id="calendar-caveat">
+                * לוח הזמנים כולל סייג לשינויים לא צפויים, קצב אישור משימות והיענות הלקוח.
+            </p>
+        </div>
+
+        <div class="calc-details-list" style="margin-top: 1rem;">
+            <div class="calc-detail-row">
+                <span>שלבים שנבחרו:</span>
+                <span id="selected-sprints-count">0</span>
+            </div>
+            <div class="calc-detail-row">
+                <span>תוספות אופציונליות:</span>
+                <span id="selected-options-count">0</span>
+            </div>
+        </div>
+    </aside>
+
+    <!-- תוכן מרכזי -->
+    <main>
+        
+        <!-- שלבי הפיתוח המודולריים -->
+        <section>
+            <h2>
+                <span>1. שלבי הפיתוח המודולריים (מערכת הליבה)</span>
+                <span class="section-badge">נדרש להשקת האתר (MVP)</span>
+            </h2>
+            <div class="cards-list">
+                
+                <!-- Stage 1 -->
+                <div class="card" onclick="toggleSelection('s1')" id="card-s1">
+                    <div class="checkbox-wrapper">
+                        <input type="checkbox" class="card-checkbox" id="check-s1" data-hours="70" data-cost="10500" data-time="2" data-type="sprint" onchange="recalc('s1')">
+                    </div>
+                    <div class="card-content">
+                        <div class="card-title-bar">
+                            <span class="card-title">שלב 1: תשתית פרויקט, אתר תדמית ציבורי ואזור הורים מאובטח (דסקטופ)</span>
+                            <span class="card-time-badge">2 שבועות</span>
+                            <span class="rfp-link">סעיפים: 1, 2.1–2.5, 3.1–3.8, 9, 10, 12, 13</span>
+                        </div>
+                        <p class="card-desc">הקמת תשתית הפרויקט, בסיס הנתונים וסביבת הפיתוח. הקמת אתר תדמית ציבורי (דף הבית) בגרסת דסקטופ (התאמה למובייל מוצעת כחלופה אופציונלית), עם סרגל עליון/תפריט המבורגר הכולל אזור אישי, "מי אנחנו", "צור קשר", "לקוחות מספרים" ורשימת הספרים הפעילים המתעדכנת דינמית. מערכת רישום והתחברות מאובטחת להורים בדסקטופ (כולל אזור אישי לעדכון פרופיל, פרטי קשר ושחזור/שינוי סיסמה), עם תמיכה בהזדהות ע"י Username/Password או OAuth צד שלישי. מסך בחירה ללקוח מזוהה (סעיף 3.8) המציע: המשך עריכה של ספרים פתוחים, פתיחת ספר חדש, והזמנת עותקים נוספים לספר קיים — כולל הודעות שגיאה כאשר אין ספרים בסטטוס המבוקש. ממשק MVP באנגלית בלבד; אופציית רב-לשוני (שפות אירופיות) תתומחר בנפרד לפי דרישה (סעיף 2.1). חיבור למערכת תזכורות ודיוור כדוגמת "רב מסר" לליווי לקוחות וקמפיינים שיווקיים (סעיפים 2.2, 12).</p>
+                        <div class="card-justification">הסבר פשוט: הקמת נוכחות רשת ראשונית ואיסוף לידים, לצד ממשק התחברות ורישום פעיל להורים כבסיס לכלל המערכת בדסקטופ.</div>
+                    </div>
+                    <div class="card-price-info">
+                        ₪10,500
+                        <span class="card-hours-sub">70 שעות</span>
+                    </div>
+                </div>
+
+                <!-- Stage 2 -->
+                <div class="card" onclick="toggleSelection('s2')" id="card-s2">
+                    <div class="checkbox-wrapper">
+                        <input type="checkbox" class="card-checkbox" id="check-s2" data-hours="83" data-cost="12500" data-time="2.5" data-type="sprint" onchange="recalc('s2')">
+                    </div>
+                    <div class="card-content">
+                        <div class="card-title-bar">
+                            <span class="card-title">שלב 2: שאלון הורים דינמי חכם והעלאת קבצי מולטימדיה (דסקטופ)</span>
+                            <span class="card-time-badge">2.5 שבועות</span>
+                            <span class="rfp-link">סעיפים: 3.9, 5.1–5.8, 5.13, 14.1–14.4, 15.1–15.8</span>
+                        </div>
+                        <p class="card-desc">ממשק שאלון חכם מותנה (הכרחי לעברית תקינה) המציג, מסתיר או "מאפיל" שאלות וכותרות בזמן אמת בהתאם למגדר, שמות הילדים/אחים ותשובות קודמות (סעיפים 14.3, 15.8). אכיפת שדות חובה ורשות עם סימון בולט והודעות שגיאה ייעודיות, כולל מסך אישור לפני מעבר להצגת/הדפסת הספר אם נותרו פריטי רשות חסרים (סעיפים 5.5–5.7). מערכת העלאת תמונות מגוונת מהמחשב/הטלפון (כולל חיבור ל-Google Photos ו-Dropbox), סינון קבצים, הגבלות תווים ומסגרות תמונה עם ברירת מחדל ניתנת להחלפה. שמירה אוטומטית של כל הקלטים והתמונות (ללא מקש SAVE) עם חיווי "נשמר" גלוי על המסך כדי להרגיע את ההורה (סעיף 5.13 בשילוב עם שאלת חוויית המשתמש בסעיף 11). הנתונים נשמרים בספריית הספר בענן למשך שנתיים (כתלות בעלות תשתית), כולל תוצרי ביניים וקבצי הספר הסופיים, ומאפשרים שחזור עריכה והמשך מילוי לאחר יציאה זמנית מהאתר (סעיפים 3.9, 14.4, 15.7).</p>
+                        <div class="card-justification">הסבר פשוט: השלמת כל ממשק הקלט והעלאת התכנים של ההורים. מאפשר להציג לקבוצות מיקוד את חוויית המשתמש המדויקת של הזנת התכנים בעברית.</div>
+                    </div>
+                    <div class="card-price-info">
+                        ₪12,500
+                        <span class="card-hours-sub">83 שעות</span>
+                    </div>
+                </div>
+
+                <!-- Stage 3 -->
+                <div class="card" onclick="toggleSelection('s3')" id="card-s3">
+                    <div class="checkbox-wrapper">
+                        <input type="checkbox" class="card-checkbox" id="check-s3" data-hours="90" data-cost="13500" data-time="2.5" data-type="sprint" onchange="recalc('s3')">
+                    </div>
+                    <div class="card-content">
+                        <div class="card-title-bar">
+                            <span class="card-title">שלב 3: מנוע עימוד אוטומטי, הפקת PDF ותצוגה מקדימה דיגיטלית</span>
+                            <span class="card-time-badge">2.5 שבועות</span>
+                            <span class="rfp-link">סעיפים: 5.9–5.12, 6.1–6.3, 16.1–16.2, נספח 1</span>
+                        </div>
+                        <p class="card-desc">מנוע עימוד אוטומטי וגנרטור ספרים (PDF מוכן להדפסה) של פורמט הספר על בסיס התוכן והתמונות, הפקת קובץ PDF ברזולוציה גבוהה (Print-Ready) מותאם להדפסה פיזית, ממשק דפדוף דיגיטלי (Flipbook) לתצוגה מקדימה ואישור ההורים, והתאמה דקדוקית דינמית של משתני הטקסט והדקדוק העברי ברמת דפי הספר המיוצר.</p>
+                        <div class="card-justification">הסבר פשוט: הפעלת ליבת הטכנולוגיה (הקניין הרוחני של הפלטפורמה). הלקוח יכול לראות ספרים מוגמרים המיוצרים בזמן אמת על בסיס נתוני השאלון.</div>
+                    </div>
+                    <div class="card-price-info">
+                        ₪13,500
+                        <span class="card-hours-sub">90 שעות</span>
+                    </div>
+                </div>
+
+                <!-- Stage 4 -->
+                <div class="card" onclick="toggleSelection('s4')" id="card-s4">
+                    <div class="checkbox-wrapper">
+                        <input type="checkbox" class="card-checkbox" id="check-s4" data-hours="93" data-cost="14000" data-time="2.5" data-type="sprint" onchange="recalc('s4')">
+                    </div>
+                    <div class="card-content">
+                        <div class="card-title-bar">
+                            <span class="card-title">שלב 4: סליקת תשלומים, מערכת ניהול תוכן (CMS) וחיבור לבית דפוס</span>
+                            <span class="card-time-badge">2.5 שבועות</span>
+                            <span class="rfp-link">סעיפים: 3.10–3.11, 4.1, 5.14–5.16, 7.1–7.6, 8.1.1–8.1.2, 17.1–17.5</span>
+                        </div>
+                        <p class="card-desc">הטמעת סליקת כרטיסי אשראי מאובטחת (לפי פתרון שיבחר הלקוח) כולל דף תשלום מאובטח (הערה: לוח הזמנים להפעלת הסליקה בפועל תלוי בבחירת הספק ופתיחת חשבונות בנק תואמים ע"י הלקוח), פרטי משלוח מתוכנת הפצה סטנדרטית, ומינימום של עותק אחד לספר (סעיף 4.1). זרימת רכישה לספר חדש (סעיף 3.10) והזמנת עותקים נוספים לספר קיים (סעיף 3.11), כולל עדכון מספר עותקים, חיוב משלים על תוספות (סעיף 7.3), ואמצעי מניעת העתקה והדפסת דפים ע"י הלקוח (סעיף 7.6). חיבור ל-API של בית הדפוס שייבחר לשליחה אוטומטית של הזמנות מבוצעות, מעקב סטטוס הדפסה ואישורי קבלה — בפורמט המוסכם ללא Setting Fee (סעיף 7.5). מערכת ניהול תוכן (CMS) מבוססת בסיס נתונים המאפשרת למייסדות לעדכן עצמאית וללא שינוי קוד את ספרי הדוגמה, טבלת שאלות הטקסט, הבקשות לתמונות, הכריכות והפורזץ, כולל הוספת ספרים חדשים למערכת (סעיפים 17.1–17.5 במפרט). ניהול ספריית הספרים בענן עם הרשאות גישה מובחנות למזמין, למפתח בתקופת האחריות והתחזוקה, וללקוח הספציפי בלבד (סעיף 5.14); שליפה ואיתור ספרים לפי לקוח / ספר / ילד / תאריך יצירה (סעיף 5.15); ושמירת נתוני ניהול ובקרה (פרטי לקוחות, תאריכי עדכון, תאריכי משלוח, מעקב הפצה ואישורי קבלה) במקום מאובטח בענן (סעיף 5.16). דוחות ניהוליים מלאים (סעיף 8.1.1: רשימת משתמשים, ספרים בתהליך/הופקו, נטישות, תלונות, מעקב משלוחים, מסכימי דיוור, פילוחים סטטיסטיים) על בסיס איסוף אנליטיקה מתמשך (סעיף 8.1.2: שעת כניסה לעריכה, זמן ממוצע לעריכת ספר ולהעלאת תמונות, נקודות נטישה ושאלות "תקועות", פילוח גיאוגרפי ופרופיל הממלא (אמא/אבא), ספרים שעריכתם לא הסתיימה במשך זמן מוגדר, ומעקב אחר משתמשים שלא השלימו רכישה).</p>
+                        <div class="card-justification">הסבר פשוט: השקה מסחרית מלאה (MVP). הורים יכולים לבצע רכישות מקצה לקצה והספר נשלח להדפסה אוטומטית. המייסדות נהנות מעצמאות תפעולית לעדכון ספרים ושאלות ישירות מבסיס הנתונים ללא מפתח תוכנה.</div>
+                    </div>
+                    <div class="card-price-info">
+                        ₪14,000
+                        <span class="card-hours-sub">93 שעות</span>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- רכיבים אופציונליים לבחירה -->
+        <section>
+            <h2>
+                <span>2. רכיבים אופציונליים ותוספות עתידיות</span>
+                <span class="section-badge">לבחירה לפי דרישה</span>
+            </h2>
+            <div class="cards-list">
+
+                <!-- Option A -->
+                <div class="card" onclick="toggleSelection('oa')" id="card-oa">
+                    <div class="checkbox-wrapper">
+                        <input type="checkbox" class="card-checkbox" id="check-oa" data-hours="34" data-cost="5000" data-time="1.1" data-type="option" onchange="recalc('oa')">
+                    </div>
+                    <div class="card-content">
+                        <div class="card-title-bar">
+                            <span class="card-title">אפשרות א': "שכפול ספר קיים" (מצב עריכה מחדש)</span>
+                            <span class="rfp-link">סעיף מפרט: 3.12</span>
+                        </div>
+                        <p class="card-desc">מאפשר להורה חוזר לשכפל ספר שכבר הושלם כדי ליצור גרסה חדשה עבור אח/אחות נוספים - שמירת בחירת התמונות והעימוד תוך איפוס שמות הילד.</p>
+                        <div class="card-justification">הסבר פשוט: קיצור דרך ידידותי להורים שחוסך להם להזין את כל הפרטים מחדש.</div>
+                    </div>
+                    <div class="card-price-info">
+                        ₪5,000
+                        <span class="card-hours-sub">34 שעות</span>
+                    </div>
+                </div>
+
+                <!-- Option B -->
+                <div class="card" onclick="toggleSelection('ob')" id="card-ob">
+                    <div class="checkbox-wrapper">
+                        <input type="checkbox" class="card-checkbox" id="check-ob" data-hours="40" data-cost="6000" data-time="1.2" data-type="option" onchange="recalc('ob')">
+                    </div>
+                    <div class="card-content">
+                        <div class="card-title-bar">
+                            <span class="card-title">אפשרות ב': סנכרון תמונות מפייסבוק ואינסטגרם</span>
+                            <span class="rfp-link">סעיפי מפרט: 5.4, 15.4</span>
+                        </div>
+                        <p class="card-desc">חיבור ישיר לחשבונות פייסבוק ואינסטגרם של ההורים, המאפשר להם להעלות תמונות ישירות מהרשתות החברתיות שלהם.</p>
+                        <div class="card-justification">הסבר פשוט: הוספת מקורות מדיה מטא. הערה: דורש הגשת מסמכים ואישור של חברת מטא (Meta App Review), דבר המוסיף זמן המתנה של 2-4 שבועות.</div>
+                    </div>
+                    <div class="card-price-info">
+                        ₪6,000
+                        <span class="card-hours-sub">40 שעות</span>
+                    </div>
+                </div>
+
+                <!-- Option C -->
+                <div class="card" onclick="toggleSelection('oc')" id="card-oc">
+                    <div class="checkbox-wrapper">
+                        <input type="checkbox" class="card-checkbox" id="check-oc" data-hours="20" data-cost="3000" data-time="0.7" data-type="option" onchange="recalc('oc')">
+                    </div>
+                    <div class="card-content">
+                        <div class="card-title-bar">
+                            <span class="card-title">אפשרות ג': הורדת עותק דיגיטלי בפורמט PDF</span>
+                            <span class="rfp-link">סעיף מפרט: 5.12</span>
+                        </div>
+                        <p class="card-desc">אפשרות להורים לרכוש ולהוריד גרסה דיגיטלית של הספר (קובץ PDF מאובטח עם סימני מים) תמורת תשלום נוסף.</p>
+                        <div class="card-justification">הסבר פשוט: פתיחת ערוץ הכנסה דיגיטלי נוסף לצד הספר המודפס הפיזי.</div>
+                    </div>
+                    <div class="card-price-info">
+                        ₪3,000
+                        <span class="card-hours-sub">20 שעות</span>
+                    </div>
+                </div>
+
+                <!-- Option D -->
+                <div class="card" onclick="toggleSelection('od')" id="card-od">
+                    <div class="checkbox-wrapper">
+                        <input type="checkbox" class="card-checkbox" id="check-od" data-hours="60" data-cost="9000" data-time="1.7" data-type="option" onchange="recalc('od')">
+                    </div>
+                    <div class="card-content">
+                        <div class="card-title-bar">
+                            <span class="card-title">אפשרות ד': עריכה משותפת ממכשירים שונים במקביל</span>
+                            <span class="rfp-link">סעיף מפרט: 11.1</span>
+                        </div>
+                        <p class="card-desc">סנכרון עריכה בזמן אמת. מאפשר לאמא ולאבא להתחבר לאותו חשבון ולערוך את אותו הספר במקביל ממכשירים שונים עם פתרון סתירות אוטומטי.</p>
+                        <div class="card-justification">הסבר פשוט: פיתוח ערוץ סנכרון בזמן אמת ("העריכה האחרונה קובעת").</div>
+                    </div>
+                    <div class="card-price-info">
+                        ₪9,000
+                        <span class="card-hours-sub">60 שעות</span>
+                    </div>
+                </div>
+
+                <!-- Option E -->
+                <div class="card" onclick="toggleSelection('oe')" id="card-oe">
+                    <div class="checkbox-wrapper">
+                        <input type="checkbox" class="card-checkbox" id="check-oe" data-hours="27" data-cost="4000" data-time="0.6" data-type="option" onchange="recalc('oe')">
+                    </div>
+                    <div class="card-content">
+                        <div class="card-title-bar">
+                            <span class="card-title">אפשרות ה': התאמה מלאה למכשירים ניידים (מובייל ורספונסיביות)</span>
+                            <span class="rfp-link">סעיף מפרט: 2.1</span>
+                        </div>
+                        <p class="card-desc">התאמה עיצובית ופונקציונלית מלאה של כלל ממשקי המערכת (אתר התדמית, שאלון ההורים, העלאת הקבצים ואזור ניהול החשבון) למכשירים ניידים וטאבלטים.</p>
+                        <div class="card-justification">הסבר פשוט: הענקת חוויית משתמש חלקה ומותאמת אישית בניידים (Responsive Web App).</div>
+                    </div>
+                    <div class="card-price-info">
+                        ₪4,000
+                        <span class="card-hours-sub">27 שעות</span>
+                    </div>
+                </div>
+
+                <!-- Option F -->
+                <div class="card" onclick="toggleSelection('of')" id="card-of">
+                    <div class="checkbox-wrapper">
+                        <input type="checkbox" class="card-checkbox" id="check-of" data-hours="13" data-cost="2000" data-time="0.3" data-type="option" onchange="recalc('of')">
+                    </div>
+                    <div class="card-content">
+                        <div class="card-title-bar">
+                            <span class="card-title">אופציה ו': גיבוי תמונות חסרות מהפורזץ</span>
+                            <span class="rfp-link">סעיף מפרט: 5.4</span>
+                        </div>
+                        <p class="card-desc">העברת תמונות מדפי הפורזץ באופן אוטומטי למיקומים ייעודיים בספר במקרה של תמונות חסרות.</p>
+                        <div class="card-justification">הסבר פשוט: פיתוח לוגיקה לזיהוי חסרים בגלריה ושיבוץ תמונות פורזץ חלופיות.</div>
+                    </div>
+                    <div class="card-price-info">
+                        ₪2,000
+                        <span class="card-hours-sub">13 שעות</span>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- תנאי התקשרות -->
+        <section class="terms-panel">
+            <h3>מסגרת עבודה ותנאי התקשרות</h3>
+            <div class="terms-grid">
+                <div class="term-card">
+                    <h4>מחויבות גמישה וללא סיכון</h4>
+                    <p>האישור והתשלום מתבצעים עבור כל שלב בנפרד. עבודת הפיתוח על שלב חדש לא תתחיל לפני שהשלב הקודם נמסר, נבדק ואושר על ידכן במלואו.</p>
+                </div>
+                <div class="term-card">
+                    <h4>שקיפות מלאה בעלויות תשתית</h4>
+                    <p>עלויות שרתים (Vercel/Supabase) והוצאות תפעול דינמיות (עמלות סליקת אשראי, וכל כלי חיצוני או שירות חיצוני) משולמות ישירות לספקים השונים במחיר עלות ללא עמלות נוספות.</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+</div>
+
+<!-- בר נייד דביק בתחתית המסך -->
+<div class="mobile-sticky-bar" id="mobile-sticky-bar">
+    <div class="mobile-sticky-content">
+        <div class="mobile-sticky-stats">
+            <span class="mobile-sticky-hours" id="mobile-hours-val">0 שעות</span>
+            <span class="mobile-sticky-divider">|</span>
+            <span class="mobile-sticky-price" id="mobile-price-val">₪0</span>
+        </div>
+        <button class="mobile-sticky-btn" onclick="scrollToCostPanel()">פירוט מלא ⬇</button>
+    </div>
+</div>
+
+<script>
+    window.onload = function() {
+        applyPreset('essential');
+    };
+
+    function toggleSelection(id) {
+        const checkbox = document.getElementById('check-' + id);
+        if (event.target.tagName !== 'INPUT') {
+            checkbox.checked = !checkbox.checked;
+        }
+        recalc(id);
+    }
+
+    function applyPreset(type) {
+        const checkboxes = document.querySelectorAll('.card-checkbox');
+        checkboxes.forEach(cb => {
+            const id = cb.id.replace('check-', '');
+            
+            if (type === 'essential') {
+                cb.checked = (id === 's1' || id === 's2' || id === 's3' || id === 's4');
+            } else if (type === 'expanded') {
+                cb.checked = true;
+            } else if (type === 'clear') {
+                cb.checked = false;
+            }
+        });
+        recalc();
+    }
+
+    function scrollToCostPanel() {
+        document.querySelector('aside').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function recalc(changedId) {
+        const cb1 = document.getElementById('check-s1');
+        const cb2 = document.getElementById('check-s2');
+        const cb3 = document.getElementById('check-s3');
+        const cb4 = document.getElementById('check-s4');
+        
+        const cbOA = document.getElementById('check-oa');
+        const cbOB = document.getElementById('check-ob');
+        const cbOC = document.getElementById('check-oc');
+        const cbOD = document.getElementById('check-od');
+        const cbOE = document.getElementById('check-oe');
+        const cbOF = document.getElementById('check-of');
+
+        // Apply Stage and Option dependencies dynamically based on user interaction
+        if (changedId) {
+            // If user unchecked a stage, uncheck all its dependents
+            if (changedId === 's1' && !cb1.checked) {
+                cb2.checked = false;
+                cb3.checked = false;
+                cb4.checked = false;
+                cbOA.checked = false;
+                cbOB.checked = false;
+                cbOC.checked = false;
+                cbOD.checked = false;
+                cbOE.checked = false;
+                cbOF.checked = false;
+            }
+            if (changedId === 's2' && !cb2.checked) {
+                cb3.checked = false;
+                cb4.checked = false;
+                cbOB.checked = false;
+                cbOA.checked = false;
+                cbOC.checked = false;
+                cbOD.checked = false;
+                cbOF.checked = false;
+            }
+            if (changedId === 's3' && !cb3.checked) {
+                cb4.checked = false;
+                cbOA.checked = false;
+                cbOC.checked = false;
+                cbOD.checked = false;
+                cbOF.checked = false;
+            }
+
+            // If user checked a stage, check all its prerequisites
+            if (changedId === 's2' && cb2.checked) {
+                cb1.checked = true;
+            }
+            if (changedId === 's3' && cb3.checked) {
+                cb1.checked = true;
+                cb2.checked = true;
+            }
+            if (changedId === 's4' && cb4.checked) {
+                cb1.checked = true;
+                cb2.checked = true;
+                cb3.checked = true;
+            }
+
+            // If user checked an option, check all its prerequisites
+            if (changedId === 'oe' && cbOE.checked) {
+                cb1.checked = true;
+            }
+            if (changedId === 'ob' && cbOB.checked) {
+                cb1.checked = true;
+                cb2.checked = true;
+            }
+            if (['oa', 'oc', 'od', 'of'].includes(changedId)) {
+                const targetCB = document.getElementById('check-' + changedId);
+                if (targetCB && targetCB.checked) {
+                    cb1.checked = true;
+                    cb2.checked = true;
+                    cb3.checked = true;
+                }
+            }
+        }
+
+        let totalHours = 0;
+        let totalCost = 0;
+        let totalTime = 0;
+        let countSprints = 0;
+        let countOptions = 0;
+
+        const checkboxes = document.querySelectorAll('.card-checkbox');
+        checkboxes.forEach(cb => {
+            const id = cb.id.replace('check-', '');
+            const card = document.getElementById('card-' + id);
+            
+            if (cb.checked) {
+                card.classList.add('active');
+                totalHours += parseInt(cb.getAttribute('data-hours'));
+                totalCost += parseInt(cb.getAttribute('data-cost'));
+                totalTime += parseFloat(cb.getAttribute('data-time'));
+                
+                if (cb.getAttribute('data-type') === 'sprint') {
+                    countSprints++;
+                } else {
+                    countOptions++;
+                }
+            } else {
+                card.classList.remove('active');
+            }
+        });
+
+        document.getElementById('total-hours').innerText = totalHours + ' שעות';
+        document.getElementById('total-cost').innerText = '₪' + totalCost.toLocaleString();
+        document.getElementById('total-time').innerText = totalTime.toFixed(1) + ' שבועות';
+        document.getElementById('selected-sprints-count').innerText = countSprints;
+        document.getElementById('selected-options-count').innerText = countOptions;
+
+        // Recommended calendar time based on current selections
+        let calendarTimeText = '-';
+        if (cb1.checked) {
+            if (cb2.checked) {
+                if (cb3.checked) {
+                    if (cb4.checked) {
+                        if (countOptions === 0) {
+                            calendarTimeText = '4–5 חודשים';
+                        } else if (countOptions === 6) {
+                            calendarTimeText = '4–5 חודשים + עוד 1–2 חודשים לתוספות';
+                        } else {
+                            // Scale the additional time based on selected options count
+                            if (countOptions <= 2) {
+                                calendarTimeText = '4–5 חודשים + עוד כחצי חודש לתוספות';
+                            } else if (countOptions <= 4) {
+                                calendarTimeText = '4–5 חודשים + עוד כחודש לתוספות';
+                            } else {
+                                calendarTimeText = '4–5 חודשים + עוד 1–2 חודשים לתוספות';
+                            }
+                        }
+                    } else {
+                        calendarTimeText = 'כ-2.5 חודשים';
+                    }
+                } else {
+                    calendarTimeText = 'כ-1.5 חודשים';
+                }
+            } else {
+                calendarTimeText = 'כ-2 שבועות';
+            }
+        } else if (countOptions > 0) {
+            calendarTimeText = 'לפי היקף הרכיבים';
+        }
+        document.getElementById('calendar-time').innerText = calendarTimeText;
+
+        // Update mobile sticky bar
+        document.getElementById('mobile-hours-val').innerText = totalHours + ' שעות';
+        document.getElementById('mobile-price-val').innerText = '₪' + totalCost.toLocaleString();
+    }
+
+    // Initialize with the essential base platform preset on load
+    applyPreset('essential');
+</script>
+</body>
+</html>
