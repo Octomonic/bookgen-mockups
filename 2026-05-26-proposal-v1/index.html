@@ -1051,7 +1051,16 @@
 
         document.getElementById('total-hours').innerText = totalHours + ' שעות';
         document.getElementById('total-cost').innerText = '₪' + totalCost.toLocaleString();
-        document.getElementById('total-time').innerText = totalTime.toFixed(1) + ' שבועות';
+        // Show net work in the same unit family as the calendar target below:
+        // tiny selections (≤ ~3 weeks) stay in weeks; everything else converts to months
+        // so the two stats are visually comparable instead of mixing units.
+        let netTimeText;
+        if (totalTime <= 3) {
+            netTimeText = totalTime.toFixed(1) + ' שבועות';
+        } else {
+            netTimeText = 'כ-' + (totalTime / 4.33).toFixed(1) + ' חודשים';
+        }
+        document.getElementById('total-time').innerText = netTimeText;
         document.getElementById('selected-sprints-count').innerText = countSprints;
         document.getElementById('selected-options-count').innerText = countOptions;
 
