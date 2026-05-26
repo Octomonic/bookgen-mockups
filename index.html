@@ -3,13 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BookGen Mockups</title>
+<link rel="icon" type="image/png" href="/assets/octomonic-favicon.png">
+<title>Octomonic &mdash; Proposals</title>
 <style>
-  :root { --yellow: #f0c000; --black: #111; --gray: #1a1a1a; --muted: #666; }
+  :root { --yellow: #f0c000; --black: #111; --gray: #1a1a1a; --muted: #8a8a8a; }
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body { background: var(--black); color: #fff; font-family: 'Courier New', monospace; min-height: 100vh; }
   header { border-bottom: 2px solid var(--yellow); padding: 2rem 3rem; display: flex; align-items: center; gap: 1rem; }
-  header .logo { width: 32px; height: 32px; background: var(--yellow); border-radius: 4px; }
+  header img.logo { width: 44px; height: 44px; border-radius: 50%; }
   header h1 { font-size: 1.1rem; letter-spacing: 0.12em; text-transform: uppercase; }
   header span { color: var(--yellow); }
   main { padding: 3rem; max-width: 960px; }
@@ -20,15 +21,16 @@
   .card-project { font-size: 0.65rem; color: var(--yellow); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.5rem; }
   .card-title { font-size: 1rem; font-weight: 700; margin-bottom: 0.4rem; }
   .card-date { font-size: 0.75rem; color: var(--muted); }
+  .notice { margin-top: 2rem; font-size: 0.75rem; color: var(--muted); line-height: 1.6; max-width: 540px; }
 </style>
 </head>
 <body>
 <header>
-  <div class="logo"></div>
-  <h1>BookGen <span>Mockups</span></h1>
+  <img class="logo" src="/assets/octomonic-logo.png" alt="Octomonic">
+  <h1>Octomonic <span>Proposals</span></h1>
 </header>
 <main>
-  <div class="scope-tag">Shlosberg &middot; Mirom &mdash; Personal Books Platform</div>
+  <div class="scope-tag">Client Proposals &amp; Mockups</div>
   <div class="grid" id="gallery">
     <a class="card" href="/74/">
       <div class="card-project">Proposal #74</div>
@@ -36,6 +38,7 @@
       <div class="card-date">2026-05-26</div>
     </a>
   </div>
+  <p class="notice">This index lists client proposals authored by Octomonic. Access to individual documents is by direct URL only.</p>
 </main>
 </body>
 </html>
