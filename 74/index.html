@@ -214,6 +214,70 @@
             border-radius: 4px;
         }
 
+        .how-it-works {
+            grid-column: 1 / -1;
+            background: linear-gradient(135deg, rgba(240, 192, 0, 0.06) 0%, rgba(59, 130, 246, 0.04) 100%);
+            border: 1px solid var(--border);
+            border-right: 4px solid var(--brand-yellow);
+            border-radius: 14px;
+            padding: 1.5rem 1.75rem;
+            box-shadow: var(--shadow);
+        }
+
+        .how-it-works h3 {
+            color: var(--brand-yellow);
+            font-size: 0.78rem;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .how-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.25rem;
+        }
+
+        @media (min-width: 768px) {
+            .how-grid { grid-template-columns: 1fr 1fr; }
+        }
+
+        .how-card {
+            position: relative;
+            padding-right: 3.25rem;
+        }
+
+        .how-num {
+            position: absolute;
+            right: 0;
+            top: 0;
+            width: 2.4rem;
+            height: 2.4rem;
+            background: var(--brand-yellow);
+            color: var(--brand-black);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Inter', sans-serif;
+            font-weight: 800;
+            font-size: 1rem;
+        }
+
+        .how-card h4 {
+            color: var(--text-main);
+            font-size: 1.02rem;
+            margin-bottom: 0.35rem;
+        }
+
+        .how-card p {
+            color: var(--text-muted);
+            font-size: 0.92rem;
+            line-height: 1.6;
+            margin: 0;
+        }
+
         .engagement-terms {
             background: linear-gradient(135deg, #111827 0%, #0a0d16 100%);
             border: 1px solid var(--border);
@@ -856,6 +920,22 @@
         <strong>💡 טיפ אינטראקטיבי:</strong> לחצו על כרטיסיות השלבים או התוספות כדי לסמן אותן ולראות כיצד הן משפיעות על העלות הכוללת ולוחות הזמנים של הפרויקט בזמן אמת.
     </div>
 
+    <section class="how-it-works">
+        <h3>איך זה עובד — קראו לפני שמתחילים</h3>
+        <div class="how-grid">
+            <div class="how-card">
+                <div class="how-num">1</div>
+                <h4>בחירה מודולרית עם תלות בין שלבים</h4>
+                <p>ניתן לבחור ולשלם על כל שלב או תוספת בנפרד — אין חובה להתחייב מראש על כל ההצעה. עם זאת, כל שלב מחייב את השלמת השלבים שלפניו כתנאי קדם (לדוגמה: שלב 4 דורש השלמה ואישור של שלבים 1, 2 ו-3).</p>
+            </div>
+            <div class="how-card">
+                <div class="how-num">2</div>
+                <h4>מסירת שלב, בדיקה ואישור — שבועיים לכל שלב</h4>
+                <p>בתום כל שלב יימסר התוצר לבדיקת הלקוח. ללקוח יוקצו שבועיים (14 ימים קלנדריים) לבדיקה ואישור או החזרת הערות בכתב. שלב שלא יוערות/יאושר בתוך פרק זמן זה ייחשב מאושר אוטומטית. השהיה מעבר לכך תסווג כעיכוב מצד הלקוח ועלולה להשפיע על לוח הזמנים של שלבים הבאים.</p>
+            </div>
+        </div>
+    </section>
+
     <aside>
         <div class="calc-header">
             <h3>סיכום תקציב ולו"ז</h3>
@@ -907,7 +987,6 @@
                 <span>1. שלבי הפיתוח המודולריים (מערכת הליבה)</span>
                 <span class="section-badge">נדרש להשקת האתר (MVP)</span>
             </h2>
-            <p class="section-note">ניתן לבחור ולשלם על כל שלב בנפרד — אין חובה להזמין את כל ההצעה מראש. עם זאת, כל שלב מחייב את השלמת השלבים שלפניו כתנאי קדם (לדוגמה: שלב 3 דורש שלבים 1 ו-2 הושלמו ואושרו).</p>
             <div class="cards-list">
                 
                 <!-- Stage 1 -->
@@ -1124,7 +1203,7 @@
             <div class="terms-grid">
                 <div class="term-card">
                     <h4>מחויבות גמישה וללא סיכון</h4>
-                    <p>האישור והתשלום מתבצעים עבור כל שלב בנפרד. עבודת הפיתוח על שלב חדש לא תתחיל לפני שהשלב הקודם נמסר, נבדק ואושר על ידכן במלואו.</p>
+                    <p>האישור והתשלום מתבצעים עבור כל שלב בנפרד: 50% מקדמה במועד אישור פתיחת השלב, ו-50% במסירת השלב הסופית. עבודת הפיתוח על שלב חדש לא תתחיל לפני שהשלב הקודם נמסר, נבדק ואושר על ידכן במלואו.</p>
                 </div>
                 <div class="term-card">
                     <h4>שקיפות מלאה בעלויות תשתית</h4>
@@ -1154,12 +1233,8 @@
                     <p>כל המחירים בהצעה זו אינם כוללים מע"מ. שיעור המע"מ נכון להיום עומד על 18% ויתווסף לכל חשבונית. ככל ששיעור המע"מ ישתנה בחוק עד מועד ההנפקה — תחול ההתאמה לשיעור התקף בפועל.</p>
                 </li>
                 <li>
-                    <h4>תלות בין שלבים ובחירה מודולרית</h4>
-                    <p>ניתן לבחור ולשלם על כל שלב או תוספת בנפרד — אין חובה להתחייב מראש על כל ההצעה. עם זאת, כל שלב מחייב את השלמת השלבים שלפניו כתנאי קדם (לדוגמה: שלב 4 דורש השלמה ואישור של שלבים 1, 2 ו-3).</p>
-                </li>
-                <li>
-                    <h4>מסירת שלב, בדיקה ואישור</h4>
-                    <p>בתום כל שלב יימסר התוצר לבדיקת הלקוח. ללקוח יוקצו שבועיים (14 ימים קלנדריים) לבדיקה ואישור או החזרת הערות בכתב. שלב שלא יוערות/יאושר בתוך פרק זמן זה ייחשב מאושר אוטומטית. השהיה מעבר לכך תסווג כעיכוב מצד הלקוח ועלולה להשפיע על לוח הזמנים של שלבים הבאים.</p>
+                    <h4>מבנה תשלום (50/50 לכל שלב)</h4>
+                    <p>כל שלב משולם בשני חלקים שווים: 50% כמקדמה במועד אישור פתיחת השלב, ו-50% במסירת התוצר לאחר אישור הלקוח. תחילת עבודה בפועל על שלב מותנית בקבלת המקדמה. חשבונית מס/קבלה תופק עבור כל תשלום בהתאם להוראת הדין.</p>
                 </li>
                 <li>
                     <h4>אחריות שגיאות לאחר מסירה (Warranty)</h4>
@@ -1428,8 +1503,8 @@
         document.getElementById('mobile-price-val').innerText = '₪' + totalCost.toLocaleString();
     }
 
-    // Initialize with the essential base platform preset on load
-    applyPreset('essential');
+    // Initialize with nothing selected — totals start at zero, user builds up by clicking
+    applyPreset('clear');
 </script>
 </body>
 </html>
